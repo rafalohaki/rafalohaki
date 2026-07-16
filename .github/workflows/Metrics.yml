@@ -24,6 +24,13 @@ jobs:
           #  - repo          (optional, if you want to include private repositories)
           token: ${{ secrets.METRICS_TOKEN }}
 
+          # Use the built-in GITHUB_TOKEN for the commit phase — it is fresh on
+          # every run and scoped by the `permissions:` block above. The classic
+          # PAT stored in METRICS_TOKEN started returning HTTP 503 on
+          # `GET /repos/.../git/ref/heads/main` during the commit phase, which
+          # silently broke every scheduled update since Oct 2025.
+          committer_token: ${{ secrets.GITHUB_TOKEN }}
+
           # Options
           user: rafalohaki
           template: classic
