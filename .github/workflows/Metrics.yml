@@ -22,14 +22,16 @@ jobs:
           #  - read:user     (for user related data)
           #  - read:packages (for some packages related data)
           #  - repo          (optional, if you want to include private repositories)
-          token: ${{ secrets.METRICS_TOKEN }}
-
-          # Use the built-in GITHUB_TOKEN for the commit phase — it is fresh on
-          # every run and scoped by the `permissions:` block above. The classic
-          # PAT stored in METRICS_TOKEN started returning HTTP 503 on
-          # `GET /repos/.../git/ref/heads/main` during the commit phase, which
-          # silently broke every scheduled update since Oct 2025.
-          committer_token: ${{ secrets.GITHUB_TOKEN }}
+          # The classic PAT stored in METRICS_TOKEN has expired (returns HTTP
+          # 401 "Bad credentials" — confirmed via a diagnostic run), which made
+          # every scheduled update silently fail since October 2025. Use the
+          # built-in GITHUB_TOKEN instead: it is fresh on every run and its
+          # scopes cover public user data plus write access to this repo (via
+          # the `permissions: contents: write` block above).
+          # If you want private/org metrics back, generate a new classic PAT
+          # (or fine-grained token with read:user, read:org) and put it in the
+          # METRICS_TOKEN secret again, then switch this line back to it.
+          token: ${{ secrets.GITHUB_TOKEN }}
 
           # Options
           user: rafalohaki
