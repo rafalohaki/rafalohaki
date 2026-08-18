@@ -5,7 +5,7 @@ on:
   # lowlighter/metrics has no built-in retry on transient HTTP 503 from
   # GitHub's API, so a single run can fail during an API hiccup — the next
   # hourly run picks it up.
-  schedule: [{cron: "0 * * * *"}]
+  schedule: [{cron: "0 0 * * *"}]
   # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
   push: {branches: ["master", "main"]}
